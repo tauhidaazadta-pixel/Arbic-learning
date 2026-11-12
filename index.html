@@ -41,7 +41,6 @@
 
     button { font: inherit; }
 
-    /* floating background */
     .floaters {
       position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
     }
@@ -289,8 +288,26 @@
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    
+    /* Makhraj badge style */
+    .makhraj-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 14px;
+      background: #e0f0e8;
+      color: #1f5c47;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      border: 1px solid #c8e0d4;
+    }
+    .makhraj-badge span {
+      color: #c9a227;
+      margin-right: 4px;
+    }
+
     .spotlight-copy p {
-      margin: 9px 0 0; color: var(--muted);
+      margin: 6px 0 0; color: var(--muted);
       font-size: clamp(1rem, 2.8vw, 1.18rem); font-weight: 700;
     }
 
@@ -315,12 +332,6 @@
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.055); }
-    }
-    .sound-text {
-      font-size: 1.05rem; font-weight: 900;
-      color: var(--green-dark);
-      padding: 6px 14px; border-radius: 99px;
-      background: rgba(224,240,232,.75);
     }
 
     .spotlight.pop .spotlight-art {
@@ -443,6 +454,7 @@
       .spotlight-art { width: 105px; border-radius: 24px; font-size: 4.5rem; }
       .spotlight-copy h2 { font-size: 1.9rem; }
       .spotlight-copy p { font-size: .95rem; }
+      .makhraj-badge { font-size: 0.75rem; padding: 4px 10px; margin-top: 8px; }
       .sound-btn { padding: 10px 15px; font-size: .86rem; }
       .item-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; }
       .item-card { min-height: 115px; padding: 10px 5px; }
@@ -479,7 +491,7 @@
     <section id="homeView">
       <div class="intro">
         <h1>अलिफ़ बा ता सीखें ✨</h1>
-        <p>नूरानी क़ायदा • यसरनल क़ुरआन की तरह</p>
+        <p>नूरानी क़ायदा • मख़ारिज के साथ</p>
         <p id="totalProgress" class="total-progress"></p>
       </div>
       <div id="categoryGrid" class="category-grid" aria-label="Arabic lessons"></div>
@@ -497,6 +509,9 @@
           <small id="spotlightTag"></small>
           <h2 id="spotlightName"></h2>
           <p id="spotlightDetail"></p>
+          <!-- MAKHRAJ DISPLAY -->
+          <div id="spotlightMakhraj" class="makhraj-badge"></div>
+          
           <div class="spotlight-actions">
             <button id="soundButton" class="sound-btn" type="button">🔊 आवाज़ सुनें</button>
           </div>
@@ -531,150 +546,150 @@
     };
 
     /* =========================================================
-       2. LETTERS DATA
+       2. LETTERS DATA (With Makharij)
        ========================================================= */
     const LETTERS = [
-      { g:"ا", n:"Alif",  hi:"अलिफ़", ar:"أَلِف",
-        f:{r:"A", h:"अ"}, k:{r:"I", h:"इ"}, d:{r:"U", h:"उ"},
+      { g:"ا", n:"Alif",  hi:"अलिफ़", ar:"أَلِف", m:"जौफ़ (मुँह) / हल्क़",
+        f:{r:"Aa", h:"आ", tts:"آ"}, k:{r:"I", h:"इ"}, d:{r:"U", h:"उ"},
         s:{r:"—", h:"—", en:"Alif sukoon"},
         tf:{r:"An", h:"अन"}, tk:{r:"In", h:"इन"}, td:{r:"Un", h:"उन"} },
 
-      { g:"ب", n:"Baa", hi:"बा", ar:"بَاء",
+      { g:"ب", n:"Baa", hi:"बा", ar:"بَاء", m:"शफ़त (दोनों होंठ)",
         f:{r:"Ba", h:"बा"}, k:{r:"Bi", h:"बि"}, d:{r:"Bu", h:"बु"},
         s:{r:"B", h:"ब्", en:"Baa sukoon"},
         tf:{r:"Ban", h:"बन"}, tk:{r:"Bin", h:"बिन"}, td:{r:"Bun", h:"बुन"} },
 
-      { g:"ت", n:"Taa", hi:"ता", ar:"تَاء",
+      { g:"ت", n:"Taa", hi:"ता", ar:"تَاء", m:"लिसान का सिरा और ऊपरी दाँत",
         f:{r:"Ta", h:"ता"}, k:{r:"Ti", h:"ति"}, d:{r:"Tu", h:"तु"},
         s:{r:"T", h:"त्", en:"Taa sukoon"},
         tf:{r:"Tan", h:"तन"}, tk:{r:"Tin", h:"तिन"}, td:{r:"Tun", h:"तुन"} },
 
-      { g:"ث", n:"Thaa", hi:"था", ar:"ثَاء",
+      { g:"ث", n:"Thaa", hi:"था", ar:"ثَاء", m:"लिसान का सिरा और ऊपरी दाँतों का नीचे",
         f:{r:"Tha", h:"था"}, k:{r:"Thi", h:"थि"}, d:{r:"Thu", h:"थु"},
         s:{r:"Th", h:"थ्", en:"Thaa sukoon"},
         tf:{r:"Than", h:"थन"}, tk:{r:"Thin", h:"थिन"}, td:{r:"Thun", h:"थुन"} },
 
-      { g:"ج", n:"Jeem", hi:"जीम", ar:"جِيم",
+      { g:"ج", n:"Jeem", hi:"जीम", ar:"جِيم", m:"लिसान का बीच और तालू",
         f:{r:"Ja", h:"जा"}, k:{r:"Ji", h:"जि"}, d:{r:"Ju", h:"जु"},
         s:{r:"J", h:"ज्", en:"Jeem sukoon"},
         tf:{r:"Jan", h:"जन"}, tk:{r:"Jin", h:"जिन"}, td:{r:"Jun", h:"जुन"} },
 
-      { g:"ح", n:"Haa", hi:"हा", ar:"حَاء",
+      { g:"ح", n:"Haa", hi:"हा", ar:"حَاء", m:"हल्क़ (गले का बीच)",
         f:{r:"Ha", h:"हा"}, k:{r:"Hi", h:"हि"}, d:{r:"Hu", h:"हु"},
         s:{r:"H", h:"ह्", en:"Haa sukoon"},
         tf:{r:"Han", h:"हन"}, tk:{r:"Hin", h:"हिन"}, td:{r:"Hun", h:"हुन"} },
 
-      { g:"خ", n:"Khaa", hi:"खा", ar:"خَاء",
+      { g:"خ", n:"Khaa", hi:"खा", ar:"خَاء", m:"हल्क़ (गले के ऊपर)",
         f:{r:"Kha", h:"खा"}, k:{r:"Khi", h:"खि"}, d:{r:"Khu", h:"खु"},
         s:{r:"Kh", h:"ख्", en:"Khaa sukoon"},
         tf:{r:"Khan", h:"खन"}, tk:{r:"Khin", h:"खिन"}, td:{r:"Khun", h:"खुन"} },
 
-      { g:"د", n:"Daal", hi:"दाल", ar:"دَال",
+      { g:"د", n:"Daal", hi:"दाल", ar:"دَال", m:"लिसान का सिरा और ऊपरी दाँत",
         f:{r:"Da", h:"दा"}, k:{r:"Di", h:"दि"}, d:{r:"Du", h:"दु"},
         s:{r:"D", h:"द्", en:"Daal sukoon"},
         tf:{r:"Dan", h:"दन"}, tk:{r:"Din", h:"दिन"}, td:{r:"Dun", h:"दुन"} },
 
-      { g:"ذ", n:"Dhaal", hi:"ज़ाल", ar:"ذَال",
+      { g:"ذ", n:"Dhaal", hi:"ज़ाल", ar:"ذَال", m:"लिसान का सिरा और ऊपरी दाँतों का नीचे",
         f:{r:"Dha", h:"ज़ा"}, k:{r:"Dhi", h:"ज़ि"}, d:{r:"Dhu", h:"ज़ु"},
         s:{r:"Dh", h:"ज़्", en:"Dhaal sukoon"},
         tf:{r:"Dhan", h:"ज़न"}, tk:{r:"Dhin", h:"ज़िन"}, td:{r:"Dhun", h:"ज़ुन"} },
 
-      { g:"ر", n:"Raa", hi:"रा", ar:"رَاء",
+      { g:"ر", n:"Raa", hi:"रा", ar:"رَاء", m:"लिसान का सिरा (थोड़ा पीछे)",
         f:{r:"Ra", h:"रा"}, k:{r:"Ri", h:"रि"}, d:{r:"Ru", h:"रु"},
         s:{r:"R", h:"र्", en:"Raa sukoon"},
         tf:{r:"Ran", h:"रन"}, tk:{r:"Rin", h:"रिन"}, td:{r:"Run", h:"रुन"} },
 
-      { g:"ز", n:"Zaa", hi:"ज़ा", ar:"زَاي",
+      { g:"ز", n:"Zaa", hi:"ज़ा", ar:"زَاي", m:"लिसान का सिरा और नीचे के दाँत",
         f:{r:"Za", h:"ज़ा"}, k:{r:"Zi", h:"ज़ि"}, d:{r:"Zu", h:"ज़ु"},
         s:{r:"Z", h:"ज़्", en:"Zaa sukoon"},
         tf:{r:"Zan", h:"ज़न"}, tk:{r:"Zin", h:"ज़िन"}, td:{r:"Zun", h:"ज़ुन"} },
 
-      { g:"س", n:"Seen", hi:"सीन", ar:"سِين",
+      { g:"س", n:"Seen", hi:"सीन", ar:"سِين", m:"लिसान का सिरा और नीचे के दाँत",
         f:{r:"Sa", h:"सा"}, k:{r:"Si", h:"सि"}, d:{r:"Su", h:"सु"},
         s:{r:"S", h:"स्", en:"Seen sukoon"},
         tf:{r:"San", h:"सन"}, tk:{r:"Sin", h:"सिन"}, td:{r:"Sun", h:"सुन"} },
 
-      { g:"ش", n:"Sheen", hi:"शीन", ar:"شِين",
+      { g:"ش", n:"Sheen", hi:"शीन", ar:"شِين", m:"लिसान का बीच और तालू",
         f:{r:"Sha", h:"शा"}, k:{r:"Shi", h:"शि"}, d:{r:"Shu", h:"शु"},
         s:{r:"Sh", h:"श्", en:"Sheen sukoon"},
         tf:{r:"Shan", h:"शन"}, tk:{r:"Shin", h:"शिन"}, td:{r:"Shun", h:"शुन"} },
 
-      { g:"ص", n:"Saad", hi:"साद", ar:"صَاد",
+      { g:"ص", n:"Saad", hi:"साद", ar:"صَاد", m:"लिसान का सिरा और नीचे के दाँत (मोटा)",
         f:{r:"Sa", h:"सा"}, k:{r:"Si", h:"सि"}, d:{r:"Su", h:"सु"},
         s:{r:"S", h:"स्", en:"Saad sukoon"},
         tf:{r:"San", h:"सन"}, tk:{r:"Sin", h:"सिन"}, td:{r:"Sun", h:"सुन"} },
 
-      { g:"ض", n:"Daad", hi:"दाद", ar:"ضَاد",
+      { g:"ض", n:"Daad", hi:"दाद", ar:"ضَاد", m:"लिसान का किनारा और ऊपरी दाँत",
         f:{r:"Da", h:"दा"}, k:{r:"Di", h:"दि"}, d:{r:"Du", h:"दु"},
         s:{r:"D", h:"द्", en:"Daad sukoon"},
         tf:{r:"Dan", h:"दन"}, tk:{r:"Din", h:"दिन"}, td:{r:"Dun", h:"दुन"} },
 
-      { g:"ط", n:"Taa", hi:"ता", ar:"طَاء",
+      { g:"ط", n:"Taa", hi:"ता", ar:"طَاء", m:"लिसान का सिरा और ऊपरी दाँत (मोटा)",
         f:{r:"Ta", h:"ता"}, k:{r:"Ti", h:"ति"}, d:{r:"Tu", h:"तु"},
         s:{r:"T", h:"त्", en:"Taa sukoon"},
         tf:{r:"Tan", h:"तन"}, tk:{r:"Tin", h:"तिन"}, td:{r:"Tun", h:"तुन"} },
 
-      { g:"ظ", n:"Zaa", hi:"ज़ा", ar:"ظَاء",
+      { g:"ظ", n:"Zaa", hi:"ज़ा", ar:"ظَاء", m:"लिसान का सिरा और ऊपरी दाँतों का नीचे (मोटा)",
         f:{r:"Za", h:"ज़ा"}, k:{r:"Zi", h:"ज़ि"}, d:{r:"Zu", h:"ज़ु"},
         s:{r:"Z", h:"ज़्", en:"Zaa sukoon"},
         tf:{r:"Zan", h:"ज़न"}, tk:{r:"Zin", h:"ज़िन"}, td:{r:"Zun", h:"ज़ुन"} },
 
-      { g:"ع", n:"Ain", hi:"ऐन", ar:"عَين",
+      { g:"ع", n:"Ain", hi:"ऐन", ar:"عَين", m:"हल्क़ (गले का बीच)",
         f:{r:"A", h:"अ"}, k:{r:"I", h:"इ"}, d:{r:"U", h:"उ"},
         s:{r:"'", h:"ऽ", en:"Ain sukoon"},
         tf:{r:"An", h:"अन"}, tk:{r:"In", h:"इन"}, td:{r:"Un", h:"उन"} },
 
-      { g:"غ", n:"Ghain", hi:"ग़ैन", ar:"غَين",
+      { g:"غ", n:"Ghain", hi:"ग़ैन", ar:"غَين", m:"हल्क़ (गले के ऊपर)",
         f:{r:"Gha", h:"ग़ा"}, k:{r:"Ghi", h:"ग़ि"}, d:{r:"Ghu", h:"ग़ु"},
         s:{r:"Gh", h:"ग़्", en:"Ghain sukoon"},
         tf:{r:"Ghan", h:"ग़न"}, tk:{r:"Ghin", h:"ग़िन"}, td:{r:"Ghun", h:"ग़ुन"} },
 
-      { g:"ف", n:"Faa", hi:"फ़ा", ar:"فَاء",
+      { g:"ف", n:"Faa", hi:"फ़ा", ar:"فَاء", m:"ऊपर के होंठ और नीचे के दाँत",
         f:{r:"Fa", h:"फ़ा"}, k:{r:"Fi", h:"फ़ि"}, d:{r:"Fu", h:"फ़ु"},
         s:{r:"F", h:"फ़्", en:"Faa sukoon"},
         tf:{r:"Fan", h:"फ़न"}, tk:{r:"Fin", h:"फ़िन"}, td:{r:"Fun", h:"फ़ुन"} },
 
-      { g:"ق", n:"Qaaf", hi:"क़ाफ़", ar:"قَاف",
+      { g:"ق", n:"Qaaf", hi:"क़ाफ़", ar:"قَاف", m:"लिसान का सबसे पीछे का हिस्सा और तालू",
         f:{r:"Qa", h:"क़ा"}, k:{r:"Qi", h:"क़ि"}, d:{r:"Qu", h:"क़ु"},
         s:{r:"Q", h:"क़्", en:"Qaaf sukoon"},
         tf:{r:"Qan", h:"क़न"}, tk:{r:"Qin", h:"क़िन"}, td:{r:"Qun", h:"क़ुन"} },
 
-      { g:"ك", n:"Kaaf", hi:"काफ़", ar:"كَاف",
+      { g:"ك", n:"Kaaf", hi:"काफ़", ar:"كَاف", m:"लिसान का पिछला हिस्सा (थोड़ा आगे)",
         f:{r:"Ka", h:"का"}, k:{r:"Ki", h:"कि"}, d:{r:"Ku", h:"कु"},
         s:{r:"K", h:"क्", en:"Kaaf sukoon"},
         tf:{r:"Kan", h:"कन"}, tk:{r:"Kin", h:"किन"}, td:{r:"Kun", h:"कुन"} },
 
-      { g:"ل", n:"Laam", hi:"लाम", ar:"لَام",
+      { g:"ل", n:"Laam", hi:"लाम", ar:"لَام", m:"लिसान का किनारा (दाँतों तक)",
         f:{r:"La", h:"ला"}, k:{r:"Li", h:"लि"}, d:{r:"Lu", h:"लु"},
         s:{r:"L", h:"ल्", en:"Laam sukoon"},
         tf:{r:"Lan", h:"लन"}, tk:{r:"Lin", h:"लिन"}, td:{r:"Lun", h:"लुन"} },
 
-      { g:"م", n:"Meem", hi:"मीम", ar:"مِيم",
+      { g:"م", n:"Meem", hi:"मीम", ar:"مِيم", m:"दोनों होंठ",
         f:{r:"Ma", h:"मा"}, k:{r:"Mi", h:"मि"}, d:{r:"Mu", h:"मु"},
         s:{r:"M", h:"म्", en:"Meem sukoon"},
         tf:{r:"Man", h:"मन"}, tk:{r:"Min", h:"मिन"}, td:{r:"Mun", h:"मुन"} },
 
-      { g:"ن", n:"Noon", hi:"नून", ar:"نُون",
+      { g:"ن", n:"Noon", hi:"नून", ar:"نُون", m:"लिसान का सिरा और नाक",
         f:{r:"Na", h:"ना"}, k:{r:"Ni", h:"नि"}, d:{r:"Nu", h:"नु"},
         s:{r:"N", h:"न्", en:"Noon sukoon"},
         tf:{r:"Nan", h:"नन"}, tk:{r:"Nin", h:"निन"}, td:{r:"Nun", h:"नुन"} },
 
-      { g:"و", n:"Waw", hi:"वाव", ar:"وَاو",
+      { g:"و", n:"Waw", hi:"वाव", ar:"وَاو", m:"दोनों होंठ (गोल करके)",
         f:{r:"Wa", h:"वा"}, k:{r:"Wi", h:"वि"}, d:{r:"Wu", h:"वु"},
         s:{r:"W", h:"व्", en:"Waw sukoon"},
         tf:{r:"Wan", h:"वन"}, tk:{r:"Win", h:"विन"}, td:{r:"Wun", h:"वुन"} },
 
-      { g:"ه", n:"Haa", hi:"हा", ar:"هَاء",
+      { g:"ه", n:"Haa", hi:"हा", ar:"هَاء", m:"हल्क़ (गले का सबसे नीचे)",
         f:{r:"Ha", h:"हा"}, k:{r:"Hi", h:"हि"}, d:{r:"Hu", h:"हु"},
         s:{r:"H", h:"ह्", en:"Haa sukoon"},
         tf:{r:"Han", h:"हन"}, tk:{r:"Hin", h:"हिन"}, td:{r:"Hun", h:"हुन"} },
 
-      { g:"ء", n:"Hamza", hi:"हम्ज़ा", ar:"هَمْزَة",
+      { g:"ء", n:"Hamza", hi:"हम्ज़ा", ar:"هَمْزَة", m:"हल्क़ (गले का सबसे नीचे)",
         f:{r:"A", h:"अ", d:"أَ"}, k:{r:"I", h:"इ", d:"إِ"}, d:{r:"U", h:"उ", d:"أُ"},
         s:{r:"'", h:"ऽ", d:"ءْ", en:"Hamza sukoon"},
         tf:{r:"An", h:"अन", d:"أً"}, tk:{r:"In", h:"इन", d:"إٍ"}, td:{r:"Un", h:"उन", d:"أٌ"} },
 
-      { g:"ي", n:"Yaa", hi:"या", ar:"يَاء",
+      { g:"ي", n:"Yaa", hi:"या", ar:"يَاء", m:"लिसान का बीच और तालू",
         f:{r:"Ya", h:"या"}, k:{r:"Yi", h:"यि"}, d:{r:"Yu", h:"यु"},
         s:{r:"Y", h:"य्", en:"Yaa sukoon"},
         tf:{r:"Yan", h:"यन"}, tk:{r:"Yin", h:"यिन"}, td:{r:"Yun", h:"युन"} }
@@ -691,7 +706,7 @@
         config: null
       },
       {
-        id: "fatha", title: "ज़बर", subtitle: "अलिफ़ ज़बर = अ • Fatha",
+        id: "fatha", title: "ज़बर", subtitle: "अलिफ़ ज़बर = आ • Fatha",
         icon: "بَ", arabicLabel: "فَتْحَة",
         grad: ["#ffe4f0", "#ffc2dc", "#ff9ec4"],
         config: { key: "f", mark: HARAKAT.fatha }
@@ -744,6 +759,7 @@
           forSpeech: l.ar,
           roman: l.n,
           hindi: l.hi,
+          makhraj: l.m,
           speakFallback: l.n
         }));
       }
@@ -753,15 +769,15 @@
         const display = info.d || (l.g + mark);
         return {
           display,
-          forSpeech: display,
+          forSpeech: info.tts || display,
           roman: info.r,
           hindi: info.h,
+          makhraj: l.m,
           speakFallback: info.en || info.r
         };
       });
     }
 
-    // === IMPORTANT FIX: Items are built immediately here ===
     CATEGORIES.forEach(cat => {
       cat.items = buildItems(cat);
     });
@@ -805,7 +821,6 @@
       speechSynthesis.speak(utt);
     }
 
-    // Warm up voices
     if ("speechSynthesis" in window) {
       speechSynthesis.getVoices();
       speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
@@ -827,6 +842,7 @@
     const spotlightTag = document.getElementById("spotlightTag");
     const spotlightName = document.getElementById("spotlightName");
     const spotlightDetail = document.getElementById("spotlightDetail");
+    const spotlightMakhraj = document.getElementById("spotlightMakhraj");
     const soundButton = document.getElementById("soundButton");
     const itemCount = document.getElementById("itemCount");
     const totalProgress = document.getElementById("totalProgress");
@@ -964,8 +980,13 @@
       spotlightTag.textContent = activeCategory.id === "letters"
         ? "हर्फ़ • Letter"
         : activeCategory.title + " • " + activeCategory.arabicLabel;
+      
       spotlightName.textContent = item.roman;
       spotlightDetail.textContent = item.hindi;
+      
+      // Update Makhraj display
+      spotlightMakhraj.innerHTML = `<span>📍</span> मख़रज: ${item.makhraj}`;
+      
       spotlight.setAttribute("aria-label", "Play: " + item.roman + " (" + item.hindi + ")");
 
       itemGrid.querySelectorAll(".item-card").forEach((btn, i) => {
