@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f4e8">
+  <title>अलिफ़ बा ता — अरबी क़ायदा</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a3a2e;
+      --muted: #6a8578;
+      --paper: #fffdf5;
+      --bg: #f7f4e8;
+      --gold: #c9a227;
+      --green: #2d7a5f;
+      --green-dark: #1f5c47;
+      --arabic: "Amiri", "Scheherazade New", "Traditional Arabic", "Noto Naskh Arabic", serif;
+      --ui: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+      --shadow: 0 12px 30px rgba(31, 92, 71, 0.10);
+      --shadow-lg: 0 22px 45px rgba(31, 92, 71, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--ui);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(201,162,39,.14) 0 5%, transparent 5.5%),
+        radial-gradient(circle at 92% 15%, rgba(45,122,95,.10) 0 6%, transparent 6.5%),
+        radial-gradient(circle at 88% 88%, rgba(201,162,39,.10) 0 7%, transparent 7.5%),
+        radial-gradient(circle at 10% 92%, rgba(45,122,95,.10) 0 6%, transparent 6.5%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    button { font: inherit; }
+
+    /* floating background */
+    .floaters {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    .floaters span {
+      position: absolute;
+      font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+      opacity: .10;
+      color: var(--green);
+      animation: floaty 22s ease-in-out infinite;
+    }
+    .floaters span:nth-child(1) { left: 4%;  top: 12%; animation-delay: 0s; }
+    .floaters span:nth-child(2) { right: 6%; top: 20%; animation-delay: -4s; }
+    .floaters span:nth-child(3) { left: 8%;  top: 62%; animation-delay: -8s; }
+    .floaters span:nth-child(4) { right: 9%; top: 70%; animation-delay: -12s; }
+    .floaters span:nth-child(5) { left: 46%; top: 5%;  animation-delay: -16s; }
+    .floaters span:nth-child(6) { right: 40%; top: 88%; animation-delay: -20s; }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-24px) rotate(12deg); }
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      padding: 22px 22px 48px;
+    }
+
+    /* ---------- TOPBAR ---------- */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 900; font-size: clamp(1.15rem, 3vw, 1.55rem);
+      letter-spacing: -0.4px;
+    }
+    .brand-mark {
+      display: grid; width: 52px; height: 52px; place-items: center;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #2d7a5f, #1f5c47);
+      color: #f4e4a0;
+      font-family: var(--arabic);
+      font-size: 1.9rem;
+      font-weight: 700;
+      box-shadow: 0 6px 0 #143f31, 0 8px 20px rgba(31,92,71,.30);
+      direction: rtl;
+      animation: wobble 5s ease-in-out infinite;
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-button {
+      display: grid; width: 50px; height: 50px; place-items: center;
+      border: 0; border-radius: 16px;
+      background: linear-gradient(135deg, #fff, #f0f8f4);
+      color: var(--ink);
+      box-shadow: 0 5px 0 #d8e8e0;
+      font-size: 1.3rem; cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+    }
+    .icon-button:active { transform: translateY(3px); box-shadow: 0 2px 0 #d8e8e0; }
+    .icon-button[aria-pressed="false"] { opacity: .5; }
+    .nav-button {
+      border: 0; border-radius: 16px; padding: 13px 20px;
+      color: white;
+      background: linear-gradient(135deg, #2d7a5f, #1f5c47);
+      box-shadow: 0 5px 0 #143f31;
+      font-weight: 900; cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .nav-button:hover { transform: translateY(-2px); }
+    .nav-button:active { transform: translateY(3px) scale(.98); box-shadow: 0 2px 0 #143f31; }
+    .nav-button:disabled { opacity: .48; cursor: default; transform: none; }
+
+    /* ---------- HOME ---------- */
+    .intro { margin: 16px 0 24px; text-align: center; }
+    .intro h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5.5vw, 3.4rem);
+      line-height: 1.1; letter-spacing: -1.6px;
+      background: linear-gradient(120deg, #1f5c47 0%, #c9a227 60%, #2d7a5f 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .intro p {
+      margin: 0; color: var(--muted);
+      font-size: 1.06rem; font-weight: 700;
+    }
+    .total-progress {
+      display: inline-block; margin-top: 14px !important;
+      padding: 9px 20px; border-radius: 99px;
+      background: linear-gradient(135deg, #fff, #f0f8f4);
+      box-shadow: var(--shadow);
+      color: var(--green-dark) !important;
+      font-size: .92rem !important; font-weight: 900 !important;
+      border: 2px solid #d8e8e0;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+    .category-card {
+      position: relative; overflow: hidden;
+      min-height: 200px; padding: 20px 12px 15px;
+      border: 0; border-radius: 26px;
+      color: var(--ink);
+      background: linear-gradient(150deg, var(--c1), var(--c2));
+      box-shadow: 0 8px 0 var(--c3), 0 14px 26px rgba(31,92,71,.14);
+      cursor: pointer; text-align: center;
+      transition: transform 200ms cubic-bezier(.2,1.4,.5,1), box-shadow 200ms ease;
+    }
+    .category-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 12%, rgba(255,255,255,.7) 0, transparent 55%);
+      pointer-events: none;
+    }
+    .category-card::after {
+      content: ""; position: absolute; left: -30%; bottom: -60%;
+      width: 140%; height: 100%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.45) 0, transparent 65%);
+      pointer-events: none;
+    }
+    .category-card:hover {
+      transform: translateY(-7px) rotate(-1.2deg) scale(1.02);
+      box-shadow: 0 13px 0 var(--c3), var(--shadow-lg);
+    }
+    .category-card:active { transform: translateY(-2px) scale(.98); }
+
+    .category-icon {
+      position: relative; display: grid; place-items: center;
+      margin-bottom: 10px;
+      height: 62px;
+      font-family: var(--arabic);
+      font-size: 2.6rem; font-weight: 700; line-height: 1;
+      color: var(--green-dark);
+      direction: rtl;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,.12));
+      transition: transform 250ms cubic-bezier(.2,1.6,.5,1);
+    }
+    .category-card:hover .category-icon { transform: scale(1.12) rotate(-5deg); }
+
+    .category-name {
+      position: relative; display: block;
+      font-size: 1rem; font-weight: 900; letter-spacing: -0.2px;
+    }
+    .category-subtitle {
+      position: relative; display: block; margin-top: 3px;
+      color: rgba(26,58,46,.72); font-size: .76rem; font-weight: 800;
+    }
+    .category-progress {
+      position: relative; display: block;
+      width: 80%; height: 7px; margin: 12px auto 0;
+      border-radius: 99px;
+      background: rgba(255,255,255,.7);
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+    }
+    .category-progress i {
+      display: block; height: 100%; width: 0;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #c9a227, #a88519);
+      transition: width 500ms cubic-bezier(.2,1.4,.5,1);
+    }
+    .category-progress-text {
+      position: relative; display: block; margin-top: 6px;
+      color: rgba(26,58,46,.78); font-size: .72rem; font-weight: 900;
+    }
+
+    /* ---------- LEARN VIEW ---------- */
+    .learning-heading {
+      display: flex; align-items: end; justify-content: space-between;
+      gap: 12px; margin: 26px 0 16px;
+    }
+    .learning-heading h1 {
+      margin: 0; font-size: clamp(1.6rem, 4vw, 2.3rem);
+      letter-spacing: -0.8px;
+    }
+    .keyboard-hint {
+      margin: 0; color: var(--muted);
+      font-size: .84rem; font-weight: 700; text-align: right;
+    }
+
+    .spotlight {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(120px, 200px) 1fr;
+      align-items: center;
+      gap: clamp(18px, 5vw, 44px);
+      width: 100%;
+      min-height: 250px;
+      padding: clamp(22px, 5vw, 40px);
+      border: 3px solid #fff;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(255,255,255,.9) 0, transparent 45%),
+        linear-gradient(135deg, #fff 0%, #f0f8f4 55%, #fef8e0 100%);
+      box-shadow: var(--shadow-lg);
+      color: var(--ink);
+      cursor: pointer; text-align: left; user-select: none;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      overflow: hidden;
+    }
+    .spotlight:hover { box-shadow: 0 26px 50px rgba(31,92,71,.22); }
+    .spotlight:active { transform: scale(.995); }
+
+    .spotlight-art {
+      display: grid;
+      width: clamp(120px, 25vw, 190px);
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 34px;
+      background: linear-gradient(145deg, #fff, #f0f8f4);
+      box-shadow: inset 0 0 0 3px #d8e8e0, 0 10px 22px rgba(31,92,71,.12);
+      font-family: var(--arabic);
+      font-size: clamp(5rem, 15vw, 9rem);
+      font-weight: 700;
+      line-height: 1;
+      direction: rtl;
+      unicode-bidi: isolate;
+      color: var(--green-dark);
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.10));
+    }
+
+    .spotlight-copy small {
+      display: inline-block; margin-bottom: 9px;
+      padding: 6px 14px; border-radius: 99px;
+      color: var(--green-dark);
+      background: linear-gradient(135deg, #e0f0e8, #f8f0d0);
+      font-size: .82rem; font-weight: 900;
+      letter-spacing: .5px;
+    }
+    .spotlight-copy h2 {
+      margin: 0 0 5px;
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      line-height: 1; letter-spacing: -1.2px;
+      background: linear-gradient(120deg, #1a3a2e, #2d7a5f);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .spotlight-copy p {
+      margin: 9px 0 0; color: var(--muted);
+      font-size: clamp(1rem, 2.8vw, 1.18rem); font-weight: 700;
+    }
+
+    .spotlight-actions {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 12px; margin-top: 16px;
+    }
+    .sound-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px; border: 0; border-radius: 99px;
+      background: linear-gradient(135deg, #c9a227, #a88519);
+      color: #fff; font-weight: 900; font-size: .94rem;
+      box-shadow: 0 5px 0 #8a6d12, 0 8px 18px rgba(201,162,39,.35);
+      cursor: pointer;
+      animation: pulse 2.1s ease-in-out infinite;
+    }
+    .sound-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #8a6d12;
+      animation: none;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.055); }
+    }
+    .sound-text {
+      font-size: 1.05rem; font-weight: 900;
+      color: var(--green-dark);
+      padding: 6px 14px; border-radius: 99px;
+      background: rgba(224,240,232,.75);
+    }
+
+    .spotlight.pop .spotlight-art {
+      animation: pop 440ms cubic-bezier(.2, 1.5, .5, 1);
+    }
+    @keyframes pop {
+      0% { transform: scale(.72) rotate(-8deg); }
+      65% { transform: scale(1.12) rotate(4deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    /* ---------- ITEMS GRID ---------- */
+    .items-title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin: 30px 2px 14px;
+    }
+    .items-title h2 { margin: 0; font-size: 1.28rem; letter-spacing: -0.4px; }
+    .items-title-right { display: flex; align-items: center; gap: 10px; }
+    .items-title span { color: var(--muted); font-size: .86rem; font-weight: 700; }
+
+    .mini-button {
+      border: 0; border-radius: 13px; padding: 9px 15px;
+      background: linear-gradient(135deg, #fff, #f0f8f4);
+      color: var(--ink);
+      font-weight: 900; font-size: .83rem;
+      box-shadow: 0 4px 0 #d8e8e0;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .mini-button:hover { transform: translateY(-2px); }
+    .mini-button:active { transform: translateY(2px); box-shadow: 0 1px 0 #d8e8e0; }
+
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+      gap: 12px;
+    }
+    .item-card {
+      position: relative;
+      min-height: 128px; padding: 13px 8px;
+      border: 3px solid transparent; border-radius: 22px;
+      background: linear-gradient(150deg, #fff, var(--c1, #f0f8f4));
+      box-shadow: 0 6px 0 rgba(31,92,71,.06), 0 8px 18px rgba(31,92,71,.08);
+      color: var(--ink); cursor: pointer; text-align: center;
+      transition: transform 180ms cubic-bezier(.2,1.4,.5,1), box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .item-card:hover {
+      transform: translateY(-5px) rotate(-1.5deg) scale(1.03);
+      box-shadow: 0 10px 0 rgba(31,92,71,.08), var(--shadow-lg);
+    }
+    .item-card.selected {
+      border-color: var(--gold);
+      background: linear-gradient(150deg, #fff, #fef4d0);
+      box-shadow: 0 8px 0 #e0cc7a, 0 12px 26px rgba(201,162,39,.30);
+      transform: translateY(-4px) scale(1.04);
+    }
+
+    .learned-badge {
+      position: absolute; top: 4px; right: 6px;
+      font-size: .82rem; opacity: 0;
+      transform: scale(.3) rotate(-45deg);
+      transition: opacity 250ms ease, transform 350ms cubic-bezier(.2,1.8,.5,1);
+    }
+    .item-card.learned .learned-badge { opacity: 1; transform: scale(1) rotate(0); }
+
+    .item-arabic {
+      display: block;
+      height: 56px;
+      margin-bottom: 4px;
+      font-family: var(--arabic);
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 56px;
+      direction: rtl;
+      unicode-bidi: isolate;
+      color: var(--green-dark);
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,.10));
+      transition: transform 200ms cubic-bezier(.2,1.6,.5,1);
+    }
+    .item-card:hover .item-arabic { transform: scale(1.12) rotate(3deg); }
+
+    .item-roman {
+      display: block;
+      font-size: .92rem; font-weight: 900;
+      color: var(--ink);
+    }
+    .item-hindi {
+      display: block; margin-top: 2px;
+      color: var(--muted);
+      font-size: .78rem; font-weight: 800;
+    }
+
+    .footer-note {
+      margin: 30px 0 0; color: var(--muted);
+      font-size: .84rem; font-weight: 700; text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    button:focus-visible, .spotlight:focus-visible {
+      outline: 4px solid #ffbd4a; outline-offset: 3px;
+    }
+
+    @media (max-width: 560px) {
+      .app { padding: 15px 14px 34px; }
+      .topbar { margin-bottom: 18px; }
+      .brand-mark { width: 44px; height: 44px; font-size: 1.6rem; }
+      .icon-button { width: 44px; height: 44px; }
+      .nav-button { padding: 10px 13px; font-size: .92rem; }
+      .category-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+      .category-card { min-height: 180px; padding: 14px 8px 12px; }
+      .category-icon { font-size: 2.2rem; height: 52px; }
+      .learning-heading { align-items: start; flex-direction: column; }
+      .keyboard-hint { text-align: left; }
+      .spotlight {
+        grid-template-columns: 105px 1fr;
+        min-height: 175px; gap: 15px;
+        padding: 17px; border-radius: 24px;
+      }
+      .spotlight-art { width: 105px; border-radius: 24px; font-size: 4.5rem; }
+      .spotlight-copy h2 { font-size: 1.9rem; }
+      .spotlight-copy p { font-size: .95rem; }
+      .sound-btn { padding: 10px 15px; font-size: .86rem; }
+      .item-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; }
+      .item-card { min-height: 115px; padding: 10px 5px; }
+      .item-arabic { font-size: 1.8rem; height: 46px; line-height: 46px; }
+      .item-roman { font-size: .82rem; }
+      .item-hindi { font-size: .72rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floaters" aria-hidden="true">
+    <span>☪</span><span>✦</span><span>🌙</span><span>⭐</span><span>❁</span><span>✧</span>
+  </div>
+
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">ا</span>
+        <span>अलिफ़ बा ता</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="आवाज़ चालू / बंद">🔊</button>
+        <button id="homeButton" class="nav-button" type="button" disabled>🏠 वापस</button>
+      </div>
+    </header>
+
+    <section id="homeView">
+      <div class="intro">
+        <h1>अलिफ़ बा ता सीखें ✨</h1>
+        <p>नूरानी क़ायदा • यसरनल क़ुरआन की तरह</p>
+        <p id="totalProgress" class="total-progress"></p>
+      </div>
+      <div id="categoryGrid" class="category-grid" aria-label="Arabic lessons"></div>
+    </section>
+
+    <section id="learnView" hidden>
+      <div class="learning-heading">
+        <h1 id="categoryTitle"></h1>
+        <p class="keyboard-hint">⌨️ 1–9 चुनें • S दोहराएं • R रैंडम • Esc वापस</p>
+      </div>
+
+      <div id="spotlight" class="spotlight" role="button" tabindex="0" aria-label="Repeat pronunciation">
+        <div id="spotlightArt" class="spotlight-art" aria-hidden="true"></div>
+        <div class="spotlight-copy">
+          <small id="spotlightTag"></small>
+          <h2 id="spotlightName"></h2>
+          <p id="spotlightDetail"></p>
+          <div class="spotlight-actions">
+            <button id="soundButton" class="sound-btn" type="button">🔊 आवाज़ सुनें</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="items-title">
+        <h2>आइए, चुनकर सीखें!</h2>
+        <div class="items-title-right">
+          <span id="itemCount"></span>
+          <button id="randomButton" class="mini-button" type="button">🎲 रैंडम</button>
+        </div>
+      </div>
+      <div id="itemGrid" class="item-grid" aria-label="Lesson items"></div>
+    </section>
+
+    <p class="footer-note">🌟 अल्लाह हमें इल्म दे — हर दिन कुछ नया सीखें! 🌟</p>
+  </main>
+
+  <script>
+    /* =========================================================
+       1. HARAKAT MARKS
+       ========================================================= */
+    const HARAKAT = {
+      fatha:     "\u064E",
+      kasra:     "\u0650",
+      damma:     "\u064F",
+      sukoon:    "\u0652",
+      fathatan:  "\u064B",
+      kasratan:  "\u064D",
+      dammatan:  "\u064C"
+    };
+
+    /* =========================================================
+       2. LETTERS DATA
+       Each letter: g=glyph, n=name, hi=hindi, ar=arabicName,
+       f=fatha, k=kasra, d=damma, s=sukoon,
+       tf=tanweenFath, tk=tanweenKasr, td=tanweenDamm
+       Each harakat object: r=roman, h=hindi, d=customDisplay(optional),
+                            en=englishFallback(optional)
+       ========================================================= */
+    const LETTERS = [
+      { g:"ا", n:"Alif",  hi:"अलिफ़", ar:"أَلِف",
+        f:{r:"A", h:"अ"}, k:{r:"I", h:"इ"}, d:{r:"U", h:"उ"},
+        s:{r:"—", h:"—", en:"Alif sukoon"},
+        tf:{r:"An", h:"अन"}, tk:{r:"In", h:"इन"}, td:{r:"Un", h:"उन"} },
+
+      { g:"ب", n:"Baa", hi:"बा", ar:"بَاء",
+        f:{r:"Ba", h:"बा"}, k:{r:"Bi", h:"बि"}, d:{r:"Bu", h:"बु"},
+        s:{r:"B", h:"ब्", en:"Baa sukoon"},
+        tf:{r:"Ban", h:"बन"}, tk:{r:"Bin", h:"बिन"}, td:{r:"Bun", h:"बुन"} },
+
+      { g:"ت", n:"Taa", hi:"ता", ar:"تَاء",
+        f:{r:"Ta", h:"ता"}, k:{r:"Ti", h:"ति"}, d:{r:"Tu", h:"तु"},
+        s:{r:"T", h:"त्", en:"Taa sukoon"},
+        tf:{r:"Tan", h:"तन"}, tk:{r:"Tin", h:"तिन"}, td:{r:"Tun", h:"तुन"} },
+
+      { g:"ث", n:"Thaa", hi:"था", ar:"ثَاء",
+        f:{r:"Tha", h:"था"}, k:{r:"Thi", h:"थि"}, d:{r:"Thu", h:"थु"},
+        s:{r:"Th", h:"थ्", en:"Thaa sukoon"},
+        tf:{r:"Than", h:"थन"}, tk:{r:"Thin", h:"थिन"}, td:{r:"Thun", h:"थुन"} },
+
+      { g:"ج", n:"Jeem", hi:"जीम", ar:"جِيم",
+        f:{r:"Ja", h:"जा"}, k:{r:"Ji", h:"जि"}, d:{r:"Ju", h:"जु"},
+        s:{r:"J", h:"ज्", en:"Jeem sukoon"},
+        tf:{r:"Jan", h:"जन"}, tk:{r:"Jin", h:"जिन"}, td:{r:"Jun", h:"जुन"} },
+
+      { g:"ح", n:"Haa", hi:"हा", ar:"حَاء",
+        f:{r:"Ha", h:"हा"}, k:{r:"Hi", h:"हि"}, d:{r:"Hu", h:"हु"},
+        s:{r:"H", h:"ह्", en:"Haa sukoon"},
+        tf:{r:"Han", h:"हन"}, tk:{r:"Hin", h:"हिन"}, td:{r:"Hun", h:"हुन"} },
+
+      { g:"خ", n:"Khaa", hi:"खा", ar:"خَاء",
+        f:{r:"Kha", h:"खा"}, k:{r:"Khi", h:"खि"}, d:{r:"Khu", h:"खु"},
+        s:{r:"Kh", h:"ख्", en:"Khaa sukoon"},
+        tf:{r:"Khan", h:"खन"}, tk:{r:"Khin", h:"खिन"}, td:{r:"Khun", h:"खुन"} },
+
+      { g:"د", n:"Daal", hi:"दाल", ar:"دَال",
+        f:{r:"Da", h:"दा"}, k:{r:"Di", h:"दि"}, d:{r:"Du", h:"दु"},
+        s:{r:"D", h:"द्", en:"Daal sukoon"},
+        tf:{r:"Dan", h:"दन"}, tk:{r:"Din", h:"दिन"}, td:{r:"Dun", h:"दुन"} },
+
+      { g:"ذ", n:"Dhaal", hi:"ज़ाल", ar:"ذَال",
+        f:{r:"Dha", h:"ज़ा"}, k:{r:"Dhi", h:"ज़ि"}, d:{r:"Dhu", h:"ज़ु"},
+        s:{r:"Dh", h:"ज़्", en:"Dhaal sukoon"},
+        tf:{r:"Dhan", h:"ज़न"}, tk:{r:"Dhin", h:"ज़िन"}, td:{r:"Dhun", h:"ज़ुन"} },
+
+      { g:"ر", n:"Raa", hi:"रा", ar:"رَاء",
+        f:{r:"Ra", h:"रा"}, k:{r:"Ri", h:"रि"}, d:{r:"Ru", h:"रु"},
+        s:{r:"R", h:"र्", en:"Raa sukoon"},
+        tf:{r:"Ran", h:"रन"}, tk:{r:"Rin", h:"रिन"}, td:{r:"Run", h:"रुन"} },
+
+      { g:"ز", n:"Zaa", hi:"ज़ा", ar:"زَاي",
+        f:{r:"Za", h:"ज़ा"}, k:{r:"Zi", h:"ज़ि"}, d:{r:"Zu", h:"ज़ु"},
+        s:{r:"Z", h:"ज़्", en:"Zaa sukoon"},
+        tf:{r:"Zan", h:"ज़न"}, tk:{r:"Zin", h:"ज़िन"}, td:{r:"Zun", h:"ज़ुन"} },
+
+      { g:"س", n:"Seen", hi:"सीन", ar:"سِين",
+        f:{r:"Sa", h:"सा"}, k:{r:"Si", h:"सि"}, d:{r:"Su", h:"सु"},
+        s:{r:"S", h:"स्", en:"Seen sukoon"},
+        tf:{r:"San", h:"सन"}, tk:{r:"Sin", h:"सिन"}, td:{r:"Sun", h:"सुन"} },
+
+      { g:"ش", n:"Sheen", hi:"शीन", ar:"شِين",
+        f:{r:"Sha", h:"शा"}, k:{r:"Shi", h:"शि"}, d:{r:"Shu", h:"शु"},
+        s:{r:"Sh", h:"श्", en:"Sheen sukoon"},
+        tf:{r:"Shan", h:"शन"}, tk:{r:"Shin", h:"शिन"}, td:{r:"Shun", h:"शुन"} },
+
+      { g:"ص", n:"Saad", hi:"साद", ar:"صَاد",
+        f:{r:"Sa", h:"सा"}, k:{r:"Si", h:"सि"}, d:{r:"Su", h:"सु"},
+        s:{r:"S", h:"स्", en:"Saad sukoon"},
+        tf:{r:"San", h:"सन"}, tk:{r:"Sin", h:"सिन"}, td:{r:"Sun", h:"सुन"} },
+
+      { g:"ض", n:"Daad", hi:"दाद", ar:"ضَاد",
+        f:{r:"Da", h:"दा"}, k:{r:"Di", h:"दि"}, d:{r:"Du", h:"दु"},
+        s:{r:"D", h:"द्", en:"Daad sukoon"},
+        tf:{r:"Dan", h:"दन"}, tk:{r:"Din", h:"दिन"}, td:{r:"Dun", h:"दुन"} },
+
+      { g:"ط", n:"Taa", hi:"ता", ar:"طَاء",
+        f:{r:"Ta", h:"ता"}, k:{r:"Ti", h:"ति"}, d:{r:"Tu", h:"तु"},
+        s:{r:"T", h:"त्", en:"Taa sukoon"},
+        tf:{r:"Tan", h:"तन"}, tk:{r:"Tin", h:"तिन"}, td:{r:"Tun", h:"तुन"} },
+
+      { g:"ظ", n:"Zaa", hi:"ज़ा", ar:"ظَاء",
+        f:{r:"Za", h:"ज़ा"}, k:{r:"Zi", h:"ज़ि"}, d:{r:"Zu", h:"ज़ु"},
+        s:{r:"Z", h:"ज़्", en:"Zaa sukoon"},
+        tf:{r:"Zan", h:"ज़न"}, tk:{r:"Zin", h:"ज़िन"}, td:{r:"Zun", h:"ज़ुन"} },
+
+      { g:"ع", n:"Ain", hi:"ऐन", ar:"عَين",
+        f:{r:"A", h:"अ"}, k:{r:"I", h:"इ"}, d:{r:"U", h:"उ"},
+        s:{r:"'", h:"ऽ", en:"Ain sukoon"},
+        tf:{r:"An", h:"अन"}, tk:{r:"In", h:"इन"}, td:{r:"Un", h:"उन"} },
+
+      { g:"غ", n:"Ghain", hi:"ग़ैन", ar:"غَين",
+        f:{r:"Gha", h:"ग़ा"}, k:{r:"Ghi", h:"ग़ि"}, d:{r:"Ghu", h:"ग़ु"},
+        s:{r:"Gh", h:"ग़्", en:"Ghain sukoon"},
+        tf:{r:"Ghan", h:"ग़न"}, tk:{r:"Ghin", h:"ग़िन"}, td:{r:"Ghun", h:"ग़ुन"} },
+
+      { g:"ف", n:"Faa", hi:"फ़ा", ar:"فَاء",
+        f:{r:"Fa", h:"फ़ा"}, k:{r:"Fi", h:"फ़ि"}, d:{r:"Fu", h:"फ़ु"},
+        s:{r:"F", h:"फ़्", en:"Faa sukoon"},
+        tf:{r:"Fan", h:"फ़न"}, tk:{r:"Fin", h:"फ़िन"}, td:{r:"Fun", h:"फ़ुन"} },
+
+      { g:"ق", n:"Qaaf", hi:"क़ाफ़", ar:"قَاف",
+        f:{r:"Qa", h:"क़ा"}, k:{r:"Qi", h:"क़ि"}, d:{r:"Qu", h:"क़ु"},
+        s:{r:"Q", h:"क़्", en:"Qaaf sukoon"},
+        tf:{r:"Qan", h:"क़न"}, tk:{r:"Qin", h:"क़िन"}, td:{r:"Qun", h:"क़ुन"} },
+
+      { g:"ك", n:"Kaaf", hi:"काफ़", ar:"كَاف",
+        f:{r:"Ka", h:"का"}, k:{r:"Ki", h:"कि"}, d:{r:"Ku", h:"कु"},
+        s:{r:"K", h:"क्", en:"Kaaf sukoon"},
+        tf:{r:"Kan", h:"कन"}, tk:{r:"Kin", h:"किन"}, td:{r:"Kun", h:"कुन"} },
+
+      { g:"ل", n:"Laam", hi:"लाम", ar:"لَام",
+        f:{r:"La", h:"ला"}, k:{r:"Li", h:"लि"}, d:{r:"Lu", h:"लु"},
+        s:{r:"L", h:"ल्", en:"Laam sukoon"},
+        tf:{r:"Lan", h:"लन"}, tk:{r:"Lin", h:"लिन"}, td:{r:"Lun", h:"लुन"} },
+
+      { g:"م", n:"Meem", hi:"मीम", ar:"مِيم",
+        f:{r:"Ma", h:"मा"}, k:{r:"Mi", h:"मि"}, d:{r:"Mu", h:"मु"},
+        s:{r:"M", h:"म्", en:"Meem sukoon"},
+        tf:{r:"Man", h:"मन"}, tk:{r:"Min", h:"मिन"}, td:{r:"Mun", h:"मुन"} },
+
+      { g:"ن", n:"Noon", hi:"नून", ar:"نُون",
+        f:{r:"Na", h:"ना"}, k:{r:"Ni", h:"नि"}, d:{r:"Nu", h:"नु"},
+        s:{r:"N", h:"न्", en:"Noon sukoon"},
+        tf:{r:"Nan", h:"नन"}, tk:{r:"Nin", h:"निन"}, td:{r:"Nun", h:"नुन"} },
+
+      { g:"و", n:"Waw", hi:"वाव", ar:"وَاو",
+        f:{r:"Wa", h:"वा"}, k:{r:"Wi", h:"वि"}, d:{r:"Wu", h:"वु"},
+        s:{r:"W", h:"व्", en:"Waw sukoon"},
+        tf:{r:"Wan", h:"वन"}, tk:{r:"Win", h:"विन"}, td:{r:"Wun", h:"वुन"} },
+
+      { g:"ه", n:"Haa", hi:"हा", ar:"هَاء",
+        f:{r:"Ha", h:"हा"}, k:{r:"Hi", h:"हि"}, d:{r:"Hu", h:"हु"},
+        s:{r:"H", h:"ह्", en:"Haa sukoon"},
+        tf:{r:"Han", h:"हन"}, tk:{r:"Hin", h:"हिन"}, td:{r:"Hun", h:"हुन"} },
+
+      { g:"ء", n:"Hamza", hi:"हम्ज़ा", ar:"هَمْزَة",
+        f:{r:"A", h:"अ", d:"أَ"}, k:{r:"I", h:"इ", d:"إِ"}, d:{r:"U", h:"उ", d:"أُ"},
+        s:{r:"'", h:"ऽ", d:"ءْ", en:"Hamza sukoon"},
+        tf:{r:"An", h:"अन", d:"أً"}, tk:{r:"In", h:"इन", d:"إٍ"}, td:{r:"Un", h:"उन", d:"أٌ"} },
+
+      { g:"ي", n:"Yaa", hi:"या", ar:"يَاء",
+        f:{r:"Ya", h:"या"}, k:{r:"Yi", h:"यि"}, d:{r:"Yu", h:"यु"},
+        s:{r:"Y", h:"य्", en:"Yaa sukoon"},
+        tf:{r:"Yan", h:"यन"}, tk:{r:"Yin", h:"यिन"}, td:{r:"Yun", h:"युन"} }
+    ];
+
+    /* =========================================================
+       3. CATEGORIES
+       ========================================================= */
+    const CATEGORIES = [
+      {
+        id: "letters", title: "हुरूफ़", subtitle: "अलिफ़ बा ता • Letters",
+        icon: "أ", arabicLabel: "حُرُوف",
+        grad: ["#d4f0e5", "#a8e0cc", "#7cd0b5"],
+        config: null
+      },
+      {
+        id: "fatha", title: "ज़बर", subtitle: "अलिफ़ ज़बर = अ • Fatha",
+        icon: "بَ", arabicLabel: "فَتْحَة",
+        grad: ["#ffe4f0", "#ffc2dc", "#ff9ec4"],
+        config: { key: "f", mark: HARAKAT.fatha }
+      },
+      {
+        id: "kasra", title: "ज़ेर", subtitle: "अलिफ़ ज़ेर = इ • Kasra",
+        icon: "بِ", arabicLabel: "كَسْرَة",
+        grad: ["#d4e8ff", "#a8c8ff", "#7ca8ff"],
+        config: { key: "k", mark: HARAKAT.kasra }
+      },
+      {
+        id: "damma", title: "पेश", subtitle: "अलिफ़ पेश = उ • Damma",
+        icon: "بُ", arabicLabel: "ضَمَّة",
+        grad: ["#e8dcff", "#c8b0ff", "#a880ff"],
+        config: { key: "d", mark: HARAKAT.damma }
+      },
+      {
+        id: "sukoon", title: "सुकून", subtitle: "बिना हरकत • Sukoon",
+        icon: "بْ", arabicLabel: "سُكُون",
+        grad: ["#fff0c8", "#ffe098", "#ffd060"],
+        config: { key: "s", mark: HARAKAT.sukoon }
+      },
+      {
+        id: "tanween-fath", title: "तनवीन ज़बर", subtitle: "दो ज़बर = अन • Fathatan",
+        icon: "بً", arabicLabel: "تَنْوِين",
+        grad: ["#ffdcd4", "#ffb8a8", "#ff9880"],
+        config: { key: "tf", mark: HARAKAT.fathatan }
+      },
+      {
+        id: "tanween-kasra", title: "तनवीन ज़ेर", subtitle: "दो ज़ेर = इन • Kasratan",
+        icon: "بٍ", arabicLabel: "تَنْوِين",
+        grad: ["#d4d4ff", "#b0b0ff", "#8888ff"],
+        config: { key: "tk", mark: HARAKAT.kasratan }
+      },
+      {
+        id: "tanween-damma", title: "तनवीन पेश", subtitle: "दो पेश = उन • Dammatan",
+        icon: "بٌ", arabicLabel: "تَنْوِين",
+        grad: ["#d4ffe0", "#a8f0c0", "#7ce0a0"],
+        config: { key: "td", mark: HARAKAT.dammatan }
+      }
+    ];
+
+    /* =========================================================
+       4. BUILD ITEMS
+       ========================================================= */
+    function buildItems(category) {
+      if (!category.config) {
+        return LETTERS.map(l => ({
+          display: l.g,
+          forSpeech: l.ar,
+          roman: l.n,
+          hindi: l.hi,
+          speakFallback: l.n
+        }));
+      }
+      const { key, mark } = category.config;
+      return LETTERS.map(l => {
+        const info = l[key];
+        const display = info.d || (l.g + mark);
+        return {
+          display,
+          forSpeech: display,
+          roman: info.r,
+          hindi: info.h,
+          speakFallback: info.en || info.r
+        };
+      });
+    }
+
+    /* =========================================================
+       5. SPEECH
+       ========================================================= */
+    let soundOn = true;
+
+    function speakItem(item) {
+      if (!soundOn || !item) return;
+      if (!("speechSynthesis" in window)) return;
+
+      window.speechSynthesis.cancel();
+
+      const voices = speechSynthesis.getVoices();
+      const arVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("ar"));
+      const hiVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("hi"));
+
+      const utt = new SpeechSynthesisUtterance();
+
+      if (arVoice) {
+        utt.text = item.forSpeech;
+        utt.lang = "ar-SA";
+        utt.voice = arVoice;
+        utt.rate = 0.62;
+        utt.pitch = 1;
+      } else if (hiVoice) {
+        utt.text = item.hindi;
+        utt.lang = "hi-IN";
+        utt.voice = hiVoice;
+        utt.rate = 0.78;
+        utt.pitch = 1;
+      } else {
+        utt.text = item.speakFallback || item.roman;
+        utt.lang = "en-US";
+        utt.rate = 0.82;
+        utt.pitch = 1;
+      }
+
+      speechSynthesis.speak(utt);
+    }
+
+    // Warm up voices
+    if ("speechSynthesis" in window) {
+      speechSynthesis.getVoices();
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    }
+
+    /* =========================================================
+       6. DOM
+       ========================================================= */
+    const homeView = document.getElementById("homeView");
+    const learnView = document.getElementById("learnView");
+    const categoryGrid = document.getElementById("categoryGrid");
+    const itemGrid = document.getElementById("itemGrid");
+    const homeButton = document.getElementById("homeButton");
+    const soundToggle = document.getElementById("soundToggle");
+    const randomButton = document.getElementById("randomButton");
+    const categoryTitle = document.getElementById("categoryTitle");
+    const spotlight = document.getElementById("spotlight");
+    const spotlightArt = document.getElementById("spotlightArt");
+    const spotlightTag = document.getElementById("spotlightTag");
+    const spotlightName = document.getElementById("spotlightName");
+    const spotlightDetail = document.getElementById("spotlightDetail");
+    const soundButton = document.getElementById("soundButton");
+    const itemCount = document.getElementById("itemCount");
+    const totalProgress = document.getElementById("totalProgress");
+
+    let activeCategory = null;
+    let selectedIndex = 0;
+
+    /* =========================================================
+       7. PROGRESS (localStorage)
+       ========================================================= */
+    let progress = {};
+    try {
+      progress = JSON.parse(localStorage.getItem("arabic-qaida-progress") || "{}") || {};
+    } catch (e) { progress = {}; }
+
+    function saveProgress() {
+      try { localStorage.setItem("arabic-qaida-progress", JSON.stringify(progress)); } catch (e) {}
+    }
+
+    function markLearned(catId, index) {
+      if (!progress[catId]) progress[catId] = [];
+      if (!progress[catId].includes(index)) {
+        progress[catId].push(index);
+        saveProgress();
+        updateCategoryProgress(catId);
+        updateTotalProgress();
+      }
+      const card = itemGrid.querySelector('[data-index="' + index + '"]');
+      if (card) card.classList.add("learned");
+    }
+
+    function updateCategoryProgress(catId) {
+      const card = categoryGrid.querySelector('[data-category="' + catId + '"]');
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (!card || !cat) return;
+
+      const learned = (progress[catId] || []).length;
+      const total = cat.items.length;
+      const pct = Math.round((learned / total) * 100);
+
+      const bar = card.querySelector(".category-progress i");
+      const txt = card.querySelector(".category-progress-text");
+      if (bar) bar.style.width = pct + "%";
+      if (txt) {
+        txt.textContent = learned
+          ? learned + "/" + total + " सीखे ⭐"
+          : total + " आइटम";
+      }
+    }
+
+    function updateTotalProgress() {
+      const total = CATEGORIES.reduce((s, c) => s + c.items.length, 0);
+      const learned = CATEGORIES.reduce((s, c) => s + (progress[c.id] || []).length, 0);
+      totalProgress.textContent = learned
+        ? "🎯 आपने अब तक " + learned + " / " + total + " सीखा!"
+        : "🎯 कुल " + total + " चीज़ें सीखने को मिलेंगी!";
+    }
+
+    /* =========================================================
+       8. RENDER
+       ========================================================= */
+    function renderCategories() {
+      categoryGrid.innerHTML = CATEGORIES.map(cat => {
+        const learned = (progress[cat.id] || []).length;
+        const total = cat.items.length;
+        const pct = Math.round((learned / total) * 100);
+        const g = cat.grad;
+
+        return `
+          <button class="category-card" type="button"
+            style="--c1:${g[0]};--c2:${g[1]};--c3:${g[2]}"
+            data-category="${cat.id}">
+            <span class="category-icon" aria-hidden="true">${cat.icon}</span>
+            <span class="category-name">${cat.title}</span>
+            <span class="category-subtitle">${cat.subtitle}</span>
+            <span class="category-progress"><i style="width:${pct}%"></i></span>
+            <span class="category-progress-text">
+              ${learned ? learned + "/" + total + " सीखे ⭐" : total + " आइटम"}
+            </span>
+          </button>`;
+      }).join("");
+
+      categoryGrid.querySelectorAll("[data-category]").forEach(btn => {
+        btn.addEventListener("click", () => openCategory(btn.dataset.category));
+      });
+    }
+
+    function openCategory(id) {
+      const cat = CATEGORIES.find(c => c.id === id);
+      if (!cat) return;
+
+      activeCategory = cat;
+      activeCategory.items = buildItems(cat);
+
+      selectedIndex = 0;
+      homeView.hidden = true;
+      learnView.hidden = false;
+      homeButton.disabled = false;
+
+      categoryTitle.textContent = cat.title + " — " + cat.subtitle;
+      itemCount.textContent = cat.items.length + " आइटम";
+      renderItems();
+      selectItem(0, true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderItems() {
+      const learnedList = progress[activeCategory.id] || [];
+      const c1 = activeCategory.grad[0];
+
+      itemGrid.innerHTML = activeCategory.items.map((item, index) => {
+        const learned = learnedList.includes(index);
+        return `
+          <button class="item-card${learned ? " learned" : ""}" type="button"
+            data-index="${index}" style="--c1:${c1}" aria-label="${item.roman}">
+            <span class="learned-badge" aria-hidden="true">⭐</span>
+            <span class="item-arabic" dir="rtl">${item.display}</span>
+            <span class="item-roman">${item.roman}</span>
+            <span class="item-hindi">${item.hindi}</span>
+          </button>`;
+      }).join("");
+
+      itemGrid.querySelectorAll("[data-index]").forEach(btn => {
+        btn.addEventListener("click", () => selectItem(Number(btn.dataset.index), true));
+      });
+    }
+
+    function selectItem(index, shouldSpeak) {
+      if (!activeCategory || index < 0 || index >= activeCategory.items.length) return;
+
+      selectedIndex = index;
+      const item = activeCategory.items[index];
+
+      spotlightArt.textContent = item.display;
+      spotlightTag.textContent = activeCategory.id === "letters"
+        ? "हर्फ़ • Letter"
+        : activeCategory.title + " • " + activeCategory.arabicLabel;
+      spotlightName.textContent = item.roman;
+      spotlightDetail.textContent = item.hindi;
+      spotlight.setAttribute("aria-label", "Play: " + item.roman + " (" + item.hindi + ")");
+
+      itemGrid.querySelectorAll(".item-card").forEach((btn, i) => {
+        const isSel = i === index;
+        btn.classList.toggle("selected", isSel);
+        btn.setAttribute("aria-pressed", String(isSel));
+      });
+
+      spotlight.classList.remove("pop");
+      void spotlight.offsetWidth;
+      spotlight.classList.add("pop");
+
+      if (shouldSpeak) {
+        markLearned(activeCategory.id, index);
+        speakItem(item);
+      }
+    }
+
+    function pickRandom() {
+      if (!activeCategory) return;
+      const idx = Math.floor(Math.random() * activeCategory.items.length);
+      selectItem(idx, true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function goHome() {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      activeCategory = null;
+      learnView.hidden = true;
+      homeView.hidden = false;
+      homeButton.disabled = true;
+      renderCategories();
+      updateTotalProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* =========================================================
+       9. EVENTS
+       ========================================================= */
+    homeButton.addEventListener("click", goHome);
+    randomButton.addEventListener("click", pickRandom);
+
+    spotlight.addEventListener("click", e => {
+      if (e.target.closest("#soundButton")) return;
+      if (activeCategory) speakItem(activeCategory.items[selectedIndex]);
+    });
+
+    spotlight.addEventListener("keydown", e => {
+      if (e.target !== spotlight) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (activeCategory) speakItem(activeCategory.items[selectedIndex]);
+      }
+    });
+
+    soundButton.addEventListener("click", e => {
+      e.stopPropagation();
+      if (activeCategory) speakItem(activeCategory.items[selectedIndex]);
+    });
+
+    soundToggle.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundToggle.textContent = soundOn ? "🔊" : "🔇";
+      soundToggle.setAttribute("aria-pressed", String(soundOn));
+      if (!soundOn && window.speechSynthesis) window.speechSynthesis.cancel();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (!activeCategory || e.ctrlKey || e.metaKey || e.altKey) return;
+
+      const key = e.key;
+      const lower = key.toLowerCase();
+
+      if (/^[1-9]$/.test(key)) {
+        const n = Number(key);
+        if (n - 1 < activeCategory.items.length) selectItem(n - 1, true);
+        return;
+      }
+      if (lower === "s") { e.preventDefault(); speakItem(activeCategory.items[selectedIndex]); return; }
+      if (lower === "r") { e.preventDefault(); pickRandom(); return; }
+      if (key === "Escape" || key === "Backspace") {
+        e.preventDefault();
+        goHome();
+      }
+    });
+
+    /* =========================================================
+       10. INIT
+       ========================================================= */
+    renderCategories();
+    updateTotalProgress();
+  </script>
+</body>
+</html>
