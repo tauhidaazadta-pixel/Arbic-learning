@@ -532,11 +532,6 @@
 
     /* =========================================================
        2. LETTERS DATA
-       Each letter: g=glyph, n=name, hi=hindi, ar=arabicName,
-       f=fatha, k=kasra, d=damma, s=sukoon,
-       tf=tanweenFath, tk=tanweenKasr, td=tanweenDamm
-       Each harakat object: r=roman, h=hindi, d=customDisplay(optional),
-                            en=englishFallback(optional)
        ========================================================= */
     const LETTERS = [
       { g:"ا", n:"Alif",  hi:"अलिफ़", ar:"أَلِف",
@@ -766,6 +761,11 @@
       });
     }
 
+    // === IMPORTANT FIX: Items are built immediately here ===
+    CATEGORIES.forEach(cat => {
+      cat.items = buildItems(cat);
+    });
+
     /* =========================================================
        5. SPEECH
        ========================================================= */
@@ -919,15 +919,15 @@
       if (!cat) return;
 
       activeCategory = cat;
-      activeCategory.items = buildItems(cat);
-
       selectedIndex = 0;
+      
       homeView.hidden = true;
       learnView.hidden = false;
       homeButton.disabled = false;
 
       categoryTitle.textContent = cat.title + " — " + cat.subtitle;
       itemCount.textContent = cat.items.length + " आइटम";
+      
       renderItems();
       selectItem(0, true);
       window.scrollTo({ top: 0, behavior: "smooth" });
